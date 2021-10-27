@@ -1,0 +1,36 @@
+plugins {
+    id 'java'
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+configurations {
+    ddTracerAgent
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+    ddTracerAgent "com.datadoghq:dd-java-agent:0.89.0"
+}
+
+test {
+    useJUnitPlatform()
+
+    if(project.hasProperty("dd-civisibility")) {
+        jvmArgs = [
+                "-javaagent:${configurations.ddTracerAgent.asPath}",
+                "-Ddd.service=my-java-app",
+                "-Ddd.prioritization.type=ENSURE_TRACE",
+                "-Ddd.jmxfetch.enabled=false",
+                "-Ddd.integrations.enabled=false",
+                "-Ddd.integration.junit.enabled=true",
+                "-Ddd.integration.testng.enabled=true"
+        ]
+    }
+}
