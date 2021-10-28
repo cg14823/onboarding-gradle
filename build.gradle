@@ -24,7 +24,8 @@ test {
 
     if(project.hasProperty("dd-civisibility")) {
         jvmArgs = [
-                "-javaagent:${configurations.ddTracerAgent.asPath}",
+                //"-javaagent:${configurations.ddTracerAgent.asPath}",
+                "-javaagent:/Users/daniel.rodriguezhernandez/Projects/onboarding-gradle/.datadog/dd-java-agent-0.90.0-SNAPSHOT.jar",
                 "-Ddd.service=onboarding-gradle",
                 "-Ddd.prioritization.type=ENSURE_TRACE",
                 "-Ddd.jmxfetch.enabled=false",
