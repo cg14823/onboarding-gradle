@@ -16,22 +16,20 @@ configurations {
 dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
-    ddTracerAgent "com.datadoghq:dd-java-agent:0.89.0"
+    ddTracerAgent "com.datadoghq:dd-java-agent:0.98.1"
 }
 
 test {
-    useJUnitPlatform()
-
     if(project.hasProperty("dd-civisibility")) {
         jvmArgs = [
-                //"-javaagent:${configurations.ddTracerAgent.asPath}",
-                "-javaagent:/Users/daniel.rodriguezhernandez/Projects/onboarding-gradle/.datadog/dd-java-agent-0.90.0-SNAPSHOT.jar",
-                "-Ddd.service=onboarding-gradle",
-                "-Ddd.prioritization.type=ENSURE_TRACE",
-                "-Ddd.jmxfetch.enabled=false",
-                "-Ddd.integrations.enabled=false",
-                "-Ddd.integration.junit.enabled=true",
-                "-Ddd.integration.testng.enabled=true"
+            "-javaagent:${configurations.ddTracerAgent.asPath}",
+            "-Ddd.service=onboarding-gradle",
+            "-Ddd.civisibility.enabled=true",
+            "-Ddd.trace.debug=true"
         ]
     }
+    useJUnitPlatform()
+}
+testLogging {
+    events "passed", "skipped", "failed"
 }
